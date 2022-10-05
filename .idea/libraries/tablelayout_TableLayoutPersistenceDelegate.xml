@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="tablelayout.TableLayoutPersistenceDelegate" type="repository">
+    <properties maven-id="tablelayout:TableLayoutPersistenceDelegate:20020517" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/tablelayout/TableLayoutPersistenceDelegate/20020517/TableLayoutPersistenceDelegate-20020517.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
