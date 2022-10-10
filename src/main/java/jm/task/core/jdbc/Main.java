@@ -6,6 +6,7 @@ import jm.task.core.jdbc.Model.User;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,12 +14,12 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
         Dao dao = new Dao();
-        dao.createTable();
+//        dao.createTable();
 
-        Scanner scanner = new Scanner(System.in);
-//            dao.saveUser("Иван", "17", "1979");
+//        Scanner scanner = new Scanner(System.in);
+
 //        dao.removeUserById(2);
-        dao.selectUserById();
+//        dao.selectUserById();
 
 //        System.out.println("Имя:");
 //        String name = scanner.nextLine();
@@ -27,6 +28,8 @@ public class Main {
 //        System.out.println("Дата:");
 //        String date = scanner.nextLine();
 //        scanner.close();
+//
+//        dao.saveUser(name, position, date);
 
 //        try{
 //            System.out.println(name);
@@ -49,10 +52,23 @@ public class Main {
 //        dao.removeUserById(id);
 
 
-//        System.out.println("Выбери id юзера:");
-//        id = scanner.nextInt();
+        System.out.println("Выбери id юзера:");
+        Scanner scanner = new Scanner(System.in);
+        int id = scanner.nextInt();
 
-//        List<User> getUser = dao.selectUserById();
+//        dao.getUser(id);
+
+        User user = Dao.getUser(id);
+        System.out.println(user.getDate() + " " + user.getName());
+//        ArrayList<User> getUser = dao.selectUserById(id);
+//        System.out.println("id = " +
+//                getUser.get(0).getId() + "\n" +
+//                "name = " + getUser.get(0).getName() + "\n" +
+//                "position = " + getUser.get(0).getPosition() + "\n" +
+//                "date = " + getUser.get(0).getDate()
+//        );
+
+
 //        for (User printuser : getUser) {
 //            if (id == printuser.getId()) {
 //                System.out.println(printuser.getId() + "\t" + printuser.getName() + "\t" + printuser.getDate());

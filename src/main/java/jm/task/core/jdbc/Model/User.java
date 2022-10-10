@@ -1,8 +1,11 @@
 package jm.task.core.jdbc.Model;
 
+import jm.task.core.jdbc.Dao.Dao;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.SQLException;
 
 public class User {
     @Id
@@ -17,17 +20,18 @@ public class User {
     @Column
     private String date;
 
-public User(){
+    public User() {
     }
 
-    public User(String name, String position, String date) {
+    public User(int id, String name, String position, String date) {
+        this.id = id;
         this.name = name;
         this.position = position;
         this.date = date;
     }
 
     public int getId() {
-    return id;
+        return id;
     }
 
     public void setId(int id) {
@@ -61,13 +65,9 @@ public User(){
     @Override
     public String toString() {
         return String.format("" +
-                "User id = %s, " +
-                 "name = %s, " +
-                "position = %s, " +
-                "date = %d",
-                getId(),
-                getName(),
-                getPosition(),
-                getDate());
+                "User id = " + getId() +
+                "name = " + getName() +
+                "position = " + getPosition() +
+                "date = " + getDate());
     }
 }
