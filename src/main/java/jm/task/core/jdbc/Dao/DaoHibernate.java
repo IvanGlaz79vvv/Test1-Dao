@@ -1,83 +1,44 @@
 package jm.task.core.jdbc.Dao;
 
-
 import jm.task.core.jdbc.Model.User;
 import jm.task.core.jdbc.Utils.Util;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class Dao {
+public class DaoHibernate {
 
     private static final String URL = "jdbc:mysql://localhost:3306/newbd";
     private static final String NAME = "root";
     private static final String PASSWORD = "root";
 
-    private final String newtable = "newtable";
+    private final String Tadzhiki = "Tadzhiki";
     private static final Connection conn = Util.getConnection();
-    private final String CREATETABLE = "CREATE TABLE IF NOT EXISTS newtable"
+    private final String CREATETABLE = "CREATE TABLE IF NOT EXISTS Tadzhiki"
             + "(id int PRIMARY KEY AUTO_INCREMENT, "
             + "name varchar(100),"
             + "position varchar(100), "
             + "date varchar(100))";
-    private final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
+    private final String SAVEUSER = "INSERT INTO Tadzhiki (name, position, date) VALUES (?, ?, ?)";
     private final String DELETE = "DELETE FROM newtable WHERE id = ?";
-    private static final String SELECTid = "SELECT * FROM newtable WHERE id = ? LIMIT 1";
-    private static final String SELECTname = "SELECT * FROM newtable WHERE name = ? LIMIT 1";
-    private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ? LIMIT 1";
-    private static final String SELECTdate = "SELECT * FROM newtable WHERE date = ? LIMIT 1";
+    private static final String SELECTid = "SELECT * FROM newtable WHERE id = ? LIMIT 1";//mysql
+    private static final String SELECTname = "SELECT * FROM newtable WHERE name = ? LIMIT 1";//mysql
+    private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ? LIMIT 1";//mysql
+    private static final String SELECTdate = "SELECT * FROM newtable WHERE date = ? LIMIT 1";//mysql
     private static User user = null;
 
 
-    public void createUsersTable() {
-        try (Statement statement = conn.createStatement()) {
-            conn.setAutoCommit(false);
-            statement.executeUpdate(CREATETABLE);
-            conn.commit();
-        } catch (SQLException e) {
-            try {
-                conn.rollback();
-                System.out.println("^^^^^Сработал createUsersTable() -> rollback()^^^^^\n");
-            } catch (SQLException ex) {
-                System.out.println("\n-----Начало ошибки rollback() createUsersTable()-----");
-                ex.printStackTrace();
-                System.out.println("^^^^^Конец ошибки rollback() createUsersTable()^^^^^");
-            }
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.out.println("-----Начало ошибки setAutoCommit(true) createUsersTable()-----");
-                e.printStackTrace();
-                System.out.println("^^^^^Ошибка setAutoCommit(true) createUsersTable()^^^^^");
-            }
-        }
-    }
-
-    public void saveUser(String name, String position, String date) throws SQLException {
-        conn.setAutoCommit(false);
-        try (PreparedStatement pstmt = conn.prepareStatement(SAVEUSER)) {
-            pstmt.setString(1, name);
-            pstmt.setString(2, position);
-            pstmt.setString(3, date);
-            pstmt.executeUpdate();
-            conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            System.err.println("<<<saveUser>>> " + e);
-        } finally {
-            conn.setAutoCommit(true);
-        }
-    }
-
     public static User getUserById(int id) throws SQLException {
 
-        conn.setAutoCommit(false);
-        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTid)) {  /*"SELECT * FROM newtable WHERE id = ? LIMIT 1"*/
+        try (Connection conn = Util.getConnection()) {  /*"SELECT * FROM newtable WHERE id = ? LIMIT 1"*/
 
-//            PreparedStatement preparedStatement = conn.prepareStatement(SELECTid);
+            conn.setAutoCommit(false);
+
+            PreparedStatement preparedStatement = conn.prepareStatement(SELECTid);
             preparedStatement.setInt(1, id);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -98,6 +59,7 @@ public class Dao {
         }
         return user;
     }
+
 
     public static User getUserByName(String name) throws SQLException {
 
@@ -126,6 +88,7 @@ public class Dao {
         }
         return user;
     }
+
 
     public static User getUserByPosition(String position) throws SQLException {
 
@@ -158,6 +121,7 @@ public class Dao {
         return user;
     }
 
+
     public static User getUserByDate(String date) throws SQLException {
 
         try (Connection conn = Util.getConnection()) {  /*"SELECT * FROM newtable WHERE date = ? LIMIT 1"*/
@@ -186,6 +150,7 @@ public class Dao {
         return user;
     }
 
+
     public void removeUserById(int id) throws SQLException {
         conn.setAutoCommit(false);
         try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE)) {
@@ -201,4 +166,5 @@ public class Dao {
             }
         }
     }
+
 }

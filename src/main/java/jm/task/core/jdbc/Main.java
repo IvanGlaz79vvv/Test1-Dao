@@ -3,6 +3,7 @@ package jm.task.core.jdbc;
 import jm.task.core.jdbc.Dao.Dao;
 import jm.task.core.jdbc.Model.User;
 
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
@@ -16,11 +17,8 @@ public class Main {
         Dao dao = new Dao();
 //        dao.createTable();
 
+//        try {
 //        Scanner scanner = new Scanner(System.in);
-
-//        dao.removeUserById(2);
-//        dao.selectUserById();
-
 //        System.out.println("Имя:");
 //        String name = scanner.nextLine();
 //        System.out.println("Дата заезда:");
@@ -30,18 +28,23 @@ public class Main {
 //        scanner.close();
 //
 //        dao.saveUser(name, position, date);
-
-//        try{
-//            System.out.println(name);
-//            System.out.println(position);
-//            System.out.println(date);
+//
 //        }catch (Exception e) {
-//            System.err.println("<<<Ошибка вывода в main>>> " + e);
+//            System.err.println("<<<Ошибка ввода-вывода в main>>> " + e);
 //        }
 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//        System.out.println("Выбери id юзера для удаления:");
+//        Scanner scannerRemove = new Scanner(System.in);
+//        scannerRemove = new Scanner(System.in);
+//        int id = scannerRemove.nextInt();
+//        scannerRemove.close();
+//
+//        dao.removeUserById(id);
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 //        Instant start = Instant.now();
-
-
 //        Instant finish = Instant.now();
 //        long elapsed = Duration.between(start, finish).toMillis();
 //        System.out.println("Финиш.\nПрошло времени, мс: " + elapsed);
@@ -50,34 +53,46 @@ public class Main {
 //        System.out.println("Удалить Юзера по Id, введите id:");
 //        int id = scanner.nextInt();
 //        dao.removeUserById(id);
-
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         System.out.println("Выбери id юзера:");
-        Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
+        Scanner scannerId = new Scanner(System.in);
+        scannerId = new Scanner(System.in);
+        int id = scannerId.nextInt();
+        scannerId.close();
 
-//        dao.getUser(id);
+        User user = Dao.getUserById(id);
+        System.out.println("id: " + user.getId() + "\nname: " + user.getName() + "\nposition: " + user.getPosition() + "\ndate: " + user.getDate());
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        User user = Dao.getUser(id);
-        System.out.println(user.getDate() + " " + user.getName());
-//        ArrayList<User> getUser = dao.selectUserById(id);
-//        System.out.println("id = " +
-//                getUser.get(0).getId() + "\n" +
-//                "name = " + getUser.get(0).getName() + "\n" +
-//                "position = " + getUser.get(0).getPosition() + "\n" +
-//                "date = " + getUser.get(0).getDate()
-//        );
+//        System.out.println("Выбери name юзера:");
+//        Scanner scannerName = new Scanner(System.in);
+//        String name = scannerName.next();
+//        System.out.println("name " + name);
+//        scannerName.close();
+//
+//        User user1 = Dao.getUserByName(name);
+//        System.out.println("id: " + user1.getId() + "\nname: " + user1.getName() + "\nposition: " + user1.getPosition() + "\ndate: " + user1.getDate());
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+//        System.out.println("Выбери position юзера:");
+//        Scanner scannerPosition = new Scanner(System.in);
+//        String position = scanner.next();
+//        System.out.println("position " + position);
+//        scannerPosition.close();
+//
+//        User user1 = Dao.getUserByPosition(position);
+//        System.out.println("id: " + user1.getId() + "\nname: " + user1.getName() + "\nposition: " + user1.getPosition() + "\ndate: " + user1.getDate());
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-//        for (User printuser : getUser) {
-//            if (id == printuser.getId()) {
-//                System.out.println(printuser.getId() + "\t" + printuser.getName() + "\t" + printuser.getDate());
-//            }
-//        }
-//        for(User printUser : getUser) {
-//            System.out.println(printUser.toString());
-//        }
+//        System.out.println("Выбери date юзера:");
+//        Scanner scannerDate = new Scanner(System.in);
+//        String date = scanner.next();
+//        System.out.println("date " + date);
+//        scannerDate.close();
 
-        System.exit(0);
+//        User user2 = Dao.getUserByDate(date);
+//        System.out.println("id: " + user2.getId() + "\nname: " + user2.getName() + "\nposition: " + user2.getPosition() + "\ndate: " + user2.getDate());
+    System.exit(0);
     }
 }

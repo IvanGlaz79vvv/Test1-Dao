@@ -65,9 +65,9 @@ public class User {
     @Override
     public String toString() {
         return String.format("" +
-                "User id = " + getId() +
-                "name = " + getName() +
-                "position = " + getPosition() +
-                "date = " + getDate());
+                "User id = " + getId() + "; " +
+                " name = " + getName() + "; " +
+                " position = " + getPosition() + "; " +
+                " date = " + getDate());
     }
 }
