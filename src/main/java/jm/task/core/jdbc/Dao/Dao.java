@@ -19,12 +19,12 @@ public class Dao {
 
     private final String newtable = "newtable";
     private static final Connection conn = Util.getConnection();
-    private final String CREATETABLE = "CREATE TABLE IF NOT EXISTS newtable"
+    private static final String CREATETABLE = "CREATE TABLE IF NOT EXISTS newtable"
             + "(id int PRIMARY KEY AUTO_INCREMENT, "
             + "name varchar(100),"
             + "position varchar(100), "
             + "date varchar(100))";
-    private final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
+    private static final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
     private final String DELETE = "DELETE FROM newtable WHERE id = ?";
     private static final String SELECTid = "SELECT * FROM newtable WHERE id = ?";
     private static final String SELECTname = "SELECT * FROM newtable WHERE name = ?";
@@ -33,7 +33,7 @@ public class Dao {
 //    private static User user = null;
 
 
-    public void createTable() {
+    public static void createTable() {
         try (Statement statement = conn.createStatement()) {
             conn.setAutoCommit(false);
             statement.executeUpdate(CREATETABLE);
@@ -58,7 +58,7 @@ public class Dao {
         }
     }
 
-    public void saveUser(String name, String position, String date) throws SQLException {
+    public static void saveUser(String name, String position, String date) throws SQLException {
         conn.setAutoCommit(false);
         try (PreparedStatement pstmt = conn.prepareStatement(SAVEUSER)) {
             pstmt.setString(1, name);
@@ -105,6 +105,7 @@ public class Dao {
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTname)) {  /*"SELECT * FROM newtable WHERE name = ? LIMIT 1"*/
             conn.setAutoCommit(false);
+            conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
             preparedStatement.setString(1, name);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
