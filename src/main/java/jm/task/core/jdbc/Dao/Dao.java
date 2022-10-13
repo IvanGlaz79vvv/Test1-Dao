@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Dao {
 
+    private static User user = new User();
+
     private static final String URL = "jdbc:mysql://localhost:3306/newbd";
     private static final String NAME = "root";
     private static final String PASSWORD = "root";
@@ -24,14 +26,14 @@ public class Dao {
             + "date varchar(100))";
     private final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
     private final String DELETE = "DELETE FROM newtable WHERE id = ?";
-    private static final String SELECTid = "SELECT * FROM newtable WHERE id = ? LIMIT 1";
-    private static final String SELECTname = "SELECT * FROM newtable WHERE name = ? LIMIT 1";
-    private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ? LIMIT 1";
-    private static final String SELECTdate = "SELECT * FROM newtable WHERE date = ? LIMIT 1";
-    private static User user = null;
+    private static final String SELECTid = "SELECT * FROM newtable WHERE id = ?/* LIMIT 1*/";
+    private static final String SELECTname = "SELECT * FROM newtable WHERE name = ? /*LIMIT 1*/";
+    private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ?/* LIMIT 1*/";
+    private static final String SELECTdate = "SELECT * FROM newtable WHERE date = ?/* LIMIT 1*/";
+//    private static User user = null;
 
 
-    public void createUsersTable() {
+    public void createTable() {
         try (Statement statement = conn.createStatement()) {
             conn.setAutoCommit(false);
             statement.executeUpdate(CREATETABLE);
@@ -81,13 +83,14 @@ public class Dao {
             preparedStatement.setInt(1, id);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 int userId = resultSet.getInt(1); // получили id пользователя
                 String name = resultSet.getString(2); // получили имя
                 String position = resultSet.getString(3); // получили поле position
                 String date = resultSet.getString(4); // получили date
 
-                user = new User(userId, name, position, date);
+                User user = new User(userId, name, position, date);
+                System.out.println(user.getName());
                 conn.commit();
             }
         } catch (SQLException e) {
@@ -99,54 +102,23 @@ public class Dao {
         return user;
     }
 
-    public static User getUserByName(String name) throws SQLException {
+    public static List<User> getUserByName(String name) throws SQLException {
+        List<User> arrayUsersByName = new ArrayList<>();
 
-        try (Connection conn = Util.getConnection()) {  /*"SELECT * FROM newtable WHERE name = ? LIMIT 1"*/
-
+        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTname)) {  /*"SELECT * FROM newtable WHERE name = ? LIMIT 1"*/
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement(SELECTname);
             preparedStatement.setString(1, name);  // так мы подставляем вместо знака вопроса нужный id
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int userId = resultSet.getInt(1); // получили id пользователя
-                name = resultSet.getString(2); // получили имя
-                String position = resultSet.getString(3); // получили поле position
-                String date = resultSet.getString(4); // получили date
-
-                user = new User(userId, name, position, date);
-                conn.commit();
-            }
-        } catch (SQLException e) {
-            System.err.println("<<<getUserById>>> " + e);
-            conn.rollback();
-        } finally {
-            conn.setAutoCommit(true);
-        }
-        return user;
-    }
-
-    public static User getUserByPosition(String position) throws SQLException {
-
-        List<User> arrayUsers = new ArrayList<>();
-
-        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTposition)) {
-            conn.setAutoCommit(false);
-
-            ; /*"SELECT * FROM newtable WHERE name = ? LIMIT 1"*/
-            preparedStatement.setString(1, position);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 int userId = resultSet.getInt(1); // получили id пользователя
-                String name = resultSet.getString(2); // получили имя
-                position = resultSet.getString(3); // получили поле position
+                name = resultSet.getString(2); // получили имя
+                String position = resultSet.getString(3); // получили поле position
                 String date = resultSet.getString(4); // получили date
-
                 user = new User(userId, name, position, date); //собираем юзера
-                arrayUsers.add(user);
-                System.out.println("user = " + user);
+
+                arrayUsersByName.add(user);
             }
             conn.commit();
         } catch (SQLException e) {
@@ -155,16 +127,43 @@ public class Dao {
         } finally {
             conn.setAutoCommit(true);
         }
-        return user;
+        return arrayUsersByName;
     }
 
-    public static User getUserByDate(String date) throws SQLException {
+    public static List<User> getUserByPosition(String position) throws SQLException {
+        List<User> arrayUsersByPosition = new ArrayList<>();
 
-        try (Connection conn = Util.getConnection()) {  /*"SELECT * FROM newtable WHERE date = ? LIMIT 1"*/
-
+        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTposition)) {
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement(SELECTdate);
+            preparedStatement.setString(1, position);  // так мы подставляем вместо знака вопроса нужный id
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int userId = resultSet.getInt(1); // получили id пользователя
+                String name = resultSet.getString(2); // получили имя
+                position = resultSet.getString(3); // получили поле position
+                String date = resultSet.getString(4); // получили date
+                user = new User(userId, name, position, date); //собираем юзера
+
+                arrayUsersByPosition.add(user);
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.err.println("<<<getUserById>>> " + e);
+            conn.rollback();
+        } finally {
+            conn.setAutoCommit(true);
+        }
+        return arrayUsersByPosition;
+    }
+
+    public static List<User> getUserByDate(String date) throws SQLException {
+        List<User> arrayUsersByDate = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTdate)) {  /*"SELECT * FROM newtable WHERE date = ? LIMIT 1"*/
+            conn.setAutoCommit(false);
+
             preparedStatement.setString(1, date);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -175,6 +174,7 @@ public class Dao {
                 date = resultSet.getString(4); // получили date
 
                 user = new User(userId, name, position, date);
+                arrayUsersByDate.add(user);
             }
             conn.commit();
         } catch (SQLException e) {
@@ -183,7 +183,7 @@ public class Dao {
         } finally {
             conn.setAutoCommit(true);
         }
-        return user;
+        return arrayUsersByDate;
     }
 
     public void removeUserById(int id) throws SQLException {
