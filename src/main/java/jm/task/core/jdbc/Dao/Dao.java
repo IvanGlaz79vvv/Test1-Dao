@@ -26,10 +26,10 @@ public class Dao {
             + "date varchar(100))";
     private final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
     private final String DELETE = "DELETE FROM newtable WHERE id = ?";
-    private static final String SELECTid = "SELECT * FROM newtable WHERE id = ?/* LIMIT 1*/";
-    private static final String SELECTname = "SELECT * FROM newtable WHERE name = ? /*LIMIT 1*/";
-    private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ?/* LIMIT 1*/";
-    private static final String SELECTdate = "SELECT * FROM newtable WHERE date = ?/* LIMIT 1*/";
+    private static final String SELECTid = "SELECT * FROM newtable WHERE id = ?";
+    private static final String SELECTname = "SELECT * FROM newtable WHERE name = ?";
+    private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ?";
+    private static final String SELECTdate = "SELECT * FROM newtable WHERE date = ?";
 //    private static User user = null;
 
 
@@ -76,10 +76,9 @@ public class Dao {
 
     public static User getUserById(int id) throws SQLException {
 
-        conn.setAutoCommit(false);
-        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTid)) {  /*"SELECT * FROM newtable WHERE id = ? LIMIT 1"*/
+        try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTid)) {
+            conn.setAutoCommit(false);
 
-//            PreparedStatement preparedStatement = conn.prepareStatement(SELECTid);
             preparedStatement.setInt(1, id);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -89,12 +88,11 @@ public class Dao {
                 String position = resultSet.getString(3); // получили поле position
                 String date = resultSet.getString(4); // получили date
 
-                User user = new User(userId, name, position, date);
-                System.out.println(user.getName());
-                conn.commit();
+                user = new User(userId, name, position, date);
             }
+            conn.commit();
         } catch (SQLException e) {
-            System.err.println("<<<getUserById>>> " + e);
+            System.err.println("<<<getUserById>>> Запущен rollback()" + e);
             conn.rollback();
         } finally {
             conn.setAutoCommit(true);
@@ -122,7 +120,7 @@ public class Dao {
             }
             conn.commit();
         } catch (SQLException e) {
-            System.err.println("<<<getUserById>>> " + e);
+            System.err.println("<<<getUserByName>>> Запущен rollback()" + e);
             conn.rollback();
         } finally {
             conn.setAutoCommit(true);
@@ -150,7 +148,7 @@ public class Dao {
             }
             conn.commit();
         } catch (SQLException e) {
-            System.err.println("<<<getUserById>>> " + e);
+            System.err.println("<<<getUserByPosition>>> Запущен rollback()" + e);
             conn.rollback();
         } finally {
             conn.setAutoCommit(true);
@@ -178,7 +176,7 @@ public class Dao {
             }
             conn.commit();
         } catch (SQLException e) {
-            System.err.println("<<<getUserById>>> " + e);
+            System.err.println("<<<getUserById>>> Запущен rollback()" + e);
             conn.rollback();
         } finally {
             conn.setAutoCommit(true);
