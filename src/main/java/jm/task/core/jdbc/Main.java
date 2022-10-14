@@ -2,7 +2,9 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.Dao.Dao;
 import jm.task.core.jdbc.Model.User;
+import jm.task.core.jdbc.service.UserService;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -10,51 +12,16 @@ import java.time.Instant;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
 
-        int id = 0;
-
-        Dao dao = new Dao();
-//        dao.createTable();
+//        UserService.createTable(); //Создать таблицу
 //
-//     try {
-// Scanner scanner = new Scanner(System.in);
-// System.out.println("Имя:");
-// String name = scanner.nextLine();
-// System.out.println("Дата заезда:");
-// String position = scanner.nextLine();
-// System.out.println("Дата:");
-// String date = scanner.nextLine();
+//        UserService.saveUser(); //Добавить юзера
 
-//
-// dao.saveUser(name, position, date);
-//
-// } catch (Exception e) {
-// System.err.println("<<<Ошибка ввода-вывода в main>>> " + e);
-// }
+        UserService.getUserById(); //Выбрать юзера по id
 
- //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// System.out.println("Выбери id юзера для удаления:");
-// Scanner scannerRemove = new Scanner(System.in);
-// scannerRemove = new Scanner(System.in);
-// id = scannerRemove.nextInt();
-// scannerRemove.close();
-//
-// dao.removeUserById(id);
+        UserService.removeUserById(); //Удалить юзера по id
 
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-// Instant start = Instant.now();
-// Instant finish = Instant.now();
-// long elapsed = Duration.between(start, finish).toMillis();
-// System.out.println("Финиш.\nПрошло времени, мс: " + elapsed);
-// System.out.println("Юзеры добавлены");
-//
-// System.out.println("Удалить Юзера по Id, введите id:");
-// Scanner scanner = new Scanner(System.in);
-// id = scanner.nextInt();
-// dao.removeUserById(id);
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 //        System.out.println("Выбери id юзера:");
 //        Scanner scannerId = new Scanner(System.in);
@@ -64,7 +31,6 @@ public class Main {
 //
 //        User user = Dao.getUserById(id);
 //        System.out.println(user);
-
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

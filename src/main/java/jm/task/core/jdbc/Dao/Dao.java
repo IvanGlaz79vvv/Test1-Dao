@@ -25,7 +25,7 @@ public class Dao {
             + "position varchar(100), "
             + "date varchar(100))";
     private static final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
-    private final String DELETE = "DELETE FROM newtable WHERE id = ?";
+    private static final String DELETE = "DELETE FROM newtable WHERE id = ?";
     private static final String SELECTid = "SELECT * FROM newtable WHERE id = ?";
     private static final String SELECTname = "SELECT * FROM newtable WHERE name = ?";
     private static final String SELECTposition = "SELECT * FROM newtable WHERE position = ?";
@@ -60,6 +60,7 @@ public class Dao {
 
     public static void saveUser(String name, String position, String date) throws SQLException {
         conn.setAutoCommit(false);
+        conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
         try (PreparedStatement pstmt = conn.prepareStatement(SAVEUSER)) {
             pstmt.setString(1, name);
             pstmt.setString(2, position);
@@ -78,6 +79,7 @@ public class Dao {
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTid)) {
             conn.setAutoCommit(false);
+            conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
             preparedStatement.setInt(1, id);  // так мы подставляем вместо знака вопроса нужный id
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -185,7 +187,7 @@ public class Dao {
         return arrayUsersByDate;
     }
 
-    public void removeUserById(int id) throws SQLException {
+    public static void removeUserById(int id) throws SQLException {
         conn.setAutoCommit(false);
         try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE)) {
             preparedStatement.setInt(1, id);
