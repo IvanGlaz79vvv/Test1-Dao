@@ -39,7 +39,7 @@ public class UserService {
 
     public static void getUserById() throws SQLException {
 
-        System.out.println("Выбери id выбранного юзера:");
+        System.out.println("Выбери id юзера:");
 
         Scanner scannerRemove = new Scanner(System.in);
         scannerRemove = new Scanner(System.in);
