@@ -17,13 +17,16 @@ public class Dao {
     private static final String NAME = "root";
     private static final String PASSWORD = "root";
 
-    private final String newtable = "newtable";
     private static final Connection conn = Util.getConnection();
     private static final String CREATETABLE = "CREATE TABLE IF NOT EXISTS newtable"
             + "(id int PRIMARY KEY AUTO_INCREMENT, "
             + "name varchar(100),"
             + "position varchar(100), "
             + "date varchar(100))";
+
+    private static final String TRUNCATE = "TRUNCATE TABLE newtable";
+
+    private static final String DROP = "DROP TABLE IF EXISTS newtable";
     private static final String SAVEUSER = "INSERT INTO newtable (name, position, date) VALUES (?, ?, ?)";
     private static final String DELETE = "DELETE FROM newtable WHERE id = ?";
     private static final String SELECTid = "SELECT * FROM newtable WHERE id = ?";
@@ -58,6 +61,46 @@ public class Dao {
         }
     }
 
+    public void cleanUsersTable() throws SQLException {
+        try (Statement statement = conn.createStatement()) {
+            conn.setAutoCommit(false);
+            statement.executeUpdate(TRUNCATE);
+            System.out.println("\nВсе пользователи удалены\n");
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            System.err.println("<<<cleanUsersTablee>>> rollback() " + e);
+        }
+    }
+
+    public void dropUsersTable() throws SQLException {
+        try (Statement statement = conn.createStatement()) {
+            conn.setAutoCommit(false);
+            statement.executeUpdate(DROP);
+            System.out.println("Таблица удалена");
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            System.out.println("<<<dropUsersTable>>> Ошибка rollback() " + e);
+        }
+    } catch(
+    SQLException ex)
+
+    {
+        throw new RuntimeException(ex);
+    } finally
+
+    {
+        try {
+            conn.setAutoCommit(true);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("^^^^Ошибка ropUsersTable^^^^");
+        }
+    }
+
+}
+
     public static void saveUser(String name, String position, String date) throws SQLException {
         conn.setAutoCommit(false);
         conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
@@ -73,6 +116,17 @@ public class Dao {
         } finally {
             conn.setAutoCommit(true);
         }
+    }
+
+    public static int getLastdId() throws SQLException {
+        int userId;
+        try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT MAX(id) FROM newtable")) {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            userId = resultSet.getInt(1); // получили id пользователя
+        }
+        return userId;
     }
 
     public static User getUserById(int id) throws SQLException {
