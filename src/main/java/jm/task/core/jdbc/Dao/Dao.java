@@ -82,24 +82,10 @@ public class Dao {
         } catch (SQLException e) {
             conn.rollback();
             System.out.println("<<<dropUsersTable>>> Ошибка rollback() " + e);
-        }
-    } catch(
-    SQLException ex)
-
-    {
-        throw new RuntimeException(ex);
-    } finally
-
-    {
-        try {
+        } finally {
             conn.setAutoCommit(true);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.out.println("^^^^Ошибка ropUsersTable^^^^");
         }
     }
-
-}
 
     public static void saveUser(String name, String position, String date) throws SQLException {
         conn.setAutoCommit(false);

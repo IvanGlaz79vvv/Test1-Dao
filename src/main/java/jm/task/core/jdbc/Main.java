@@ -18,10 +18,8 @@ public class Main {
 //
 //        UserService.saveUser(); //Добавить юзера
 
-        ;
         UserService.getUserById(); //Выбрать юзера по id
 
-//
 //        UserService.getUserByName(); //Выбрать юзера по name
 //
 //        UserService.getUserByDate(); //Выбрать юзера по date
