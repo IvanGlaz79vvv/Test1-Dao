@@ -4,6 +4,7 @@ package jm.task.core.jdbc.Dao;
 import jm.task.core.jdbc.Model.User;
 import jm.task.core.jdbc.Utils.Util;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Dao {
             + "(id int PRIMARY KEY AUTO_INCREMENT, "
             + "name varchar(100),"
             + "position varchar(100), "
-            + "date varchar(100))";
+            + "date D(100))";
 
     private static final String TRUNCATE = "TRUNCATE TABLE newtable";
 
@@ -199,7 +200,7 @@ public class Dao {
         return arrayUsersByPosition;
     }
 
-    public static List<User> getUserByDate(String date) throws SQLException {
+    public static List<User> getUserByDate(String date) throws SQLException, IOException {
         List<User> arrayUsersByDate = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = conn.prepareStatement(SELECTdate)) {  /*"SELECT * FROM newtable WHERE date = ? LIMIT 1"*/
