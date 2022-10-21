@@ -4,10 +4,8 @@ import jm.task.core.jdbc.Dao.Dao;
 import jm.task.core.jdbc.Model.User;
 import jm.task.core.jdbc.Utils.Util;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -15,7 +13,7 @@ import java.util.Scanner;
 
 public class UserService {
 
-    public static void createTable() {
+    public static void createTable() throws SQLException {
         Dao.createTable();
         System.exit(0);
     }

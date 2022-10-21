@@ -1,11 +1,10 @@
 package jm.task.core.jdbc.Dao;
 
 
-import com.mysql.cj.jdbc.result.ResultSetImpl;
+
 import jm.task.core.jdbc.Model.User;
 import jm.task.core.jdbc.Utils.Util;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +13,6 @@ import java.util.List;
 public class Dao {
 
     private static User user = new User();
-
-    private static final String URL = "jdbc:mysql://localhost:3306/newbd";
-    private static final String NAME = "root";
-    private static final String PASSWORD = "root";
 
     private static final Connection conn = Util.getConnection();
 
@@ -41,7 +36,7 @@ public class Dao {
 //    private static User user = null;
 
 
-    public static void createTable() {
+    public static void createTable() throws SQLException {
         conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         System.out.println("getTransactionIsolation: \n 1 = UNCOMMITTED  \n 2 = READ_COMMITTED \n 4 = REPEATABLE_READ \n 8 = SERIALIZABLE \n getTransactionIsolation: = " + conn.getTransactionIsolation());
 
@@ -259,7 +254,7 @@ public class Dao {
         return arrayUsersByPosition;
     }
 
-    public static List<User> getUserByDate(String date) throws SQLException, IOException {
+    public static List<User> getUserByDate(String date) throws SQLException {
         conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         System.out.println("getTransactionIsolation: \n 1 = UNCOMMITTED  \n 2 = READ_COMMITTED \n 4 = REPEATABLE_READ \n 8 = SERIALIZABLE \n getTransactionIsolation: = " + conn.getTransactionIsolation());
 
